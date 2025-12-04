@@ -1,61 +1,68 @@
-Below is a concise “checklist” that every backend framework (Ruby on Rails, Django, Express, Spring, ASP.NET, Laravel, FastAPI, etc.) has to solve.  If you know how your chosen framework handles each item, you can build anything.
-
-1. Request / Response life-cycle  
-   - Router – maps an HTTP verb + URL pattern to a handler (controller / action).  
-   - Middleware / Interceptors – code that runs before/after the handler (auth, CORS, logging, compression).  
-   - Request object – parsed headers, query string, body, cookies, uploaded files.  
-   - Response object – status code, headers, body (JSON, HTML, file-stream).
-
-2. Controller / Handler layer  
-   - A function or class method that receives the request and produces the response.  
-   - Keeps HTTP details thin; delegates to services for real work.
-
-3. Data persistence (ORM / query builder)  
-   - Connection pooling – re-uses DB sockets.  
-   - Migrations – versioned schema changes.  
-   - Model / Entity classes – 1-to-1 mapping to tables/collections; gives typed fields and relations.  
-   - Query API – chainable methods instead of raw SQL (e.g., `Post.filter(published=True).limit(10)`).
-
-4. Validation & serialization  
-   - Incoming: coerce and validate JSON → domain objects; return 400 on failure.  
-   - Outgoing: serialize domain objects → JSON (or XML, protobuf) with field allow-lists.
-
-5. Authentication & authorization  
-   - Strategies: session cookies, JWT, OAuth2, API keys, SSO/SAML.  
-   - Authorization: role-based (RBAC), claims-based, attribute-based (ABAC), policy decorators (`@has_role('admin')`).
-
-6. Business logic / Service layer  
-   - Plain objects/functions isolated from HTTP and DB.  
-   - Keeps controllers skinny and models persistence-focused.
-
-7. Error handling & logging  
-   - Centralized error handler converts exceptions → JSON + status code.  
-   - Structured logs (JSON) with request-id so you can trace across services.
-
-8. Configuration & environment management  
-   - 12-factor style: store config in environment variables, not source files.  
-   - Framework provides typed config objects (`config.get('CACHE_URL')`).
-
-9. Testing utilities  
-   - Test client – fake HTTP requests without spinning a server.  
-   - Fixtures / factories – create predictable DB state.  
-   - Transaction roll-back – each test runs inside a DB transaction that is aborted.
-
-10. Background jobs & task queues  
-    - Offload slow work (email, image resize, ML inference) to workers.  
-    - Framework gives job classes and a queue adapter (Redis, RabbitMQ, SQS).
-
-11. Real-time & bidirectional communication  
-    - WebSocket endpoints or Server-Sent Events.  
-    - Framework may abstract this into “channels” or “reactive streams.”
-
-12. Security primitives (baked-in or via libs)  
-    - CSRF tokens, XSS escaping, SQL-injection-safe ORM, rate-limiting, helmet-style headers (HSTS, CSP).
-
-13. Dev / debug tooling  
-    - Auto-reload on file change, interactive debugger, SQL query profiler, OpenAPI schema generation.
-
-14. Packaging & deployment helpers  
-    - CLI to start project, generate boilerplate, run migrations, collect static assets.  
-    - Docker-friendly entrypoints, health-check endpoints, graceful shutdown hooks.
-
+Below is the “minimum-viable-skill matrix” that hiring managers actually screen for when they read “I know DevOps / Infra / IaC” on a résumé.  If you can white-board or demo every bullet in the right-hand column, you are qualified for a mid-level DevOps / Platform / SRE role anywhere.
+Core OS & Networking (you can’t automate what you don’t understand)
+Linux internals: cgroups, namespaces, systemd, journald, PAM, cron, fstab, runlevels
+CLI fluency: grep/sed/awk/jq, strace, lsof, ss, iproute2, dig, tcpdump, htop, iostat
+TCP-IP, HTTP/2, TLS 1.3 handshake, gRPC, DNS recursion, DHCP, VPN tunnelling
+Ports 22, 80, 443, 6443, 2379, 5432, 3306, 6379, 11211, 9090, 10250 – know what lives where
+Cloud-native services (pick one major provider and know the rest conceptually)
+AWS (or GCP/Azure equivalent)
+├─ Compute: EC2, ASG, Lambda, ECS, EKS, Fargate
+├─ Networking: VPC, subnet, RT, IGW, NAT, SG, NACL, ELB/ALB/NLB, CloudFront, Route 53, PrivateLink
+├─ Storage & DB: EBS, EFS, S3, RDS, Aurora, DynamoDB, ElastiCache, OpenSearch
+├─ IAM: policies, roles, instance profiles, STS assume-role, SCP, permission boundaries
+├─ Observability: CloudWatch, X-Ray, Config, CloudTrail, GuardDuty
+└─ Security: KMS, SSM Parameter Store, Secrets Manager, WAF, Shield, Inspector
+Containers & Orchestration
+Dockerfile multi-stage, layer caching, distroless, BuildKit, Buildx cross-arch
+Image scanning: Trivy, Grype, Clair
+Container runtime: containerd, runc, gVisor, kata
+Kubernetes: pods, deployments, statefulset, daemonset, job/cronjob, service, ingress, networkpolicy, pv/pvc, storageclass, rbac, psp/psa, crd, operator, helm, kustomize
+Advanced: topoLVM, cert-manager, external-dns, cluster-autoscaler, Karpenter, OPA Gatekeeper, Kyverno, Istio/Linkerd service mesh, ebpf Cilium
+Infrastructure-as-Code (IaC)
+Terraform
+├─ State file, backends (S3 + DynamoDB lock), workspaces, modules, count & for_each, dynamic blocks, taint, import, moved blocks, provider versioning, tfsec / checkov
+Pulumi (nice-to-have)
+CloudFormation or ARM (know syntax even if you hate it)
+Ansible (config mgmt & ad-hoc)
+├─ Inventory (static & dynamic), playbooks, roles, handlers, vault, galaxy, ansible-lint
+Policy-as-Code: Sentinel, OPA / Conftest, AWS Config rules
+CI/CD & GitOps
+Git workflow: trunk-based vs GitFlow, signed commits, conventional-commits, semantic-release
+Pipeline engines: GitHub Actions, GitLab CI, Jenkinsfile declarative & scripted, Argo Workflows, Tekton
+Build optimisation: layer caching, buildx, kaniko, img, remote cache (GHA cache, S3)
+GitOps operators: ArgoCD (Application, AppProject, sync waves, hooks), Flux (Kustomization, HelmRelease)
+Progressive delivery: Flagger, Argo Rollouts (canary, blue-green, experimentation, metrics analysis)
+Observability & SLOs
+Pillars: metrics (Prometheus), logs (Loki/ELK), traces (Jaeger/Tempo), profiles (Parca/Pyroscope)
+Service-level objectives: SLI, SLO, error budget, burn-rate alerts (Multi-Window, Multi-Burn)
+Alerting: Alertmanager, PagerDuty/OpsGenie routing, on-call rotation, run-books in git
+Dashboards: Grafana (variables, templating, recording rules), CloudWatch, DataDog, New Relic
+Secrets & Security automation
+Sealed Secrets, External Secrets Operator, Vault (dynamic secrets, PKI, transit), SOPS
+CIS benchmarks, kube-bench, kube-hunter, ScoutSuite, Prowler
+Supply-chain: Sigstore cosign, in-toto attestations, SLSA provenance, SBOM (CycloneDX/SPDX)
+Network policies, admission controllers, OPA Gatekeeper, Falco runtime threat detection
+Git, Scripting & Automation glue
+git rebase, cherry-pick, bisect, sub-modules, worktrees, pre-commit hooks
+Bash + POSIX (set -euo pipefail), Python or Go for tooling, Make, jq, yq, envsubst
+REST & kubectl API scripting; heredoc, jsonpath, go-template, custom columns
+Backup, DR & Compliance
+Cross-region replication, lifecycle policies, point-in-time restore (RDS, Dynamo)
+Disaster-recovery run-books stored in git, tested quarterly (game-days)
+Compliance artifacts: SOC-2, ISO-27001, HIPAA, PCI-DSS, GDPR – know which services are in-scope and how to produce evidence (AWS Config, CloudTrail, GuardDuty findings)
+Cost & Performance optimisation
+- Right-sizing with AWS Compute Optimizer, Karpenter consolidation, spot + on-demand mixed instance policy
+- Savings Plans / Reserved Instances, S3 Intelligent-Tiering, lifecycle transitions
+- Kubecost, CloudHealth, AWS Cost-Anomaly detection
+Soft-skills & process
+- Everything as code → merge-request flow, peer review, ADRs (Architecture Decision Records)
+- Incident response: blameless post-mortems, 5-whys, run-book automation, on-call hand-offs
+- Documentation: README, architecture diagrams (C4, Excalidraw), run-books in /docs repo, internal tech talks
+“Prove-it” checklist (have these ready in a public repo or demo):
+A Terraform module that creates a VPC, private subnets, NAT, EKS cluster with managed node groups, IRSA roles, and installs ArgoCD via Helm provider.
+A GitHub Actions workflow that builds a multi-arch container, signs it with cosign, pushes to ECR, runs Trivy scan, opens PR to update the image tag in an ArgoCD Application manifest.
+A Helm chart with HPA, VPA, PodDisruptionBudget, NetworkPolicy, ServiceMonitor, sealed-secrets, and a canary deployment using Flagger.
+A Prometheus recording rule + Grafana dashboard that shows p99 latency and error rate; Alertmanager route that pages Slack/PagerDuty when burn rate > 5 % in 1 h.
+An Ansible playbook that hardens an Ubuntu 22.04 VM to CIS Level 1 and outputs an audit report to S3.
+A 5-minute screen recording where you: clone the repo, run terraform plan, terraform apply --auto-approve, show the ArgoCD UI syncing, open the app in browser, run kubectl top nodes, and destroy everything.
+If you can reproduce those six artifacts cold, you are “qualified” in the eyes of almost any hiring bar.
