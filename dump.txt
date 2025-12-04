@@ -1,0 +1,61 @@
+Below is a concise “checklist” that every backend framework (Ruby on Rails, Django, Express, Spring, ASP.NET, Laravel, FastAPI, etc.) has to solve.  If you know how your chosen framework handles each item, you can build anything.
+
+1. Request / Response life-cycle  
+   - Router – maps an HTTP verb + URL pattern to a handler (controller / action).  
+   - Middleware / Interceptors – code that runs before/after the handler (auth, CORS, logging, compression).  
+   - Request object – parsed headers, query string, body, cookies, uploaded files.  
+   - Response object – status code, headers, body (JSON, HTML, file-stream).
+
+2. Controller / Handler layer  
+   - A function or class method that receives the request and produces the response.  
+   - Keeps HTTP details thin; delegates to services for real work.
+
+3. Data persistence (ORM / query builder)  
+   - Connection pooling – re-uses DB sockets.  
+   - Migrations – versioned schema changes.  
+   - Model / Entity classes – 1-to-1 mapping to tables/collections; gives typed fields and relations.  
+   - Query API – chainable methods instead of raw SQL (e.g., `Post.filter(published=True).limit(10)`).
+
+4. Validation & serialization  
+   - Incoming: coerce and validate JSON → domain objects; return 400 on failure.  
+   - Outgoing: serialize domain objects → JSON (or XML, protobuf) with field allow-lists.
+
+5. Authentication & authorization  
+   - Strategies: session cookies, JWT, OAuth2, API keys, SSO/SAML.  
+   - Authorization: role-based (RBAC), claims-based, attribute-based (ABAC), policy decorators (`@has_role('admin')`).
+
+6. Business logic / Service layer  
+   - Plain objects/functions isolated from HTTP and DB.  
+   - Keeps controllers skinny and models persistence-focused.
+
+7. Error handling & logging  
+   - Centralized error handler converts exceptions → JSON + status code.  
+   - Structured logs (JSON) with request-id so you can trace across services.
+
+8. Configuration & environment management  
+   - 12-factor style: store config in environment variables, not source files.  
+   - Framework provides typed config objects (`config.get('CACHE_URL')`).
+
+9. Testing utilities  
+   - Test client – fake HTTP requests without spinning a server.  
+   - Fixtures / factories – create predictable DB state.  
+   - Transaction roll-back – each test runs inside a DB transaction that is aborted.
+
+10. Background jobs & task queues  
+    - Offload slow work (email, image resize, ML inference) to workers.  
+    - Framework gives job classes and a queue adapter (Redis, RabbitMQ, SQS).
+
+11. Real-time & bidirectional communication  
+    - WebSocket endpoints or Server-Sent Events.  
+    - Framework may abstract this into “channels” or “reactive streams.”
+
+12. Security primitives (baked-in or via libs)  
+    - CSRF tokens, XSS escaping, SQL-injection-safe ORM, rate-limiting, helmet-style headers (HSTS, CSP).
+
+13. Dev / debug tooling  
+    - Auto-reload on file change, interactive debugger, SQL query profiler, OpenAPI schema generation.
+
+14. Packaging & deployment helpers  
+    - CLI to start project, generate boilerplate, run migrations, collect static assets.  
+    - Docker-friendly entrypoints, health-check endpoints, graceful shutdown hooks.
+
