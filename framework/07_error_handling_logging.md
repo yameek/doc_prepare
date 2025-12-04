@@ -1,3 +1,5 @@
+[← Back to Index](./README.md)
+
 # 7. Error Handling & Logging
 
 When things go wrong (and they will), you need to handle it gracefully and know exactly what happened.

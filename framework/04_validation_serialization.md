@@ -1,3 +1,5 @@
+[← Back to Index](./README.md)
+
 # 4. Validation & Serialization
 
 The gateway guards of your data. Validation ensures bad data doesn't get in, and serialization ensures sensitive data doesn't get out.

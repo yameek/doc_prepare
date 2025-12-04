@@ -1,3 +1,5 @@
+[← Back to Index](./README.md)
+
 # 5. Authentication & Authorization
 
 Security is paramount. You must know who the user is (Authentication) and what they are allowed to do (Authorization).
